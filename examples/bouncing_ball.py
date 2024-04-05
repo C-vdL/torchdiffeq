@@ -31,6 +31,8 @@ class BouncingBallExample(nn.Module):
     def event_fn(self, t, state):
         # positive if ball in mid-air, negative if ball within ground.
         pos, _, log_radius = state
+        a = pos - torch.exp(log_radius)
+        # print(float(a))
         return pos - torch.exp(log_radius)
 
     def get_initial_state(self):
@@ -52,7 +54,9 @@ class BouncingBallExample(nn.Module):
 
         t0, state = self.get_initial_state()
 
+        print("")
         for i in range(nbounces):
+            print(f"i: \t\t{i}")
             event_t, solution = odeint_event(
                 self,
                 state,
@@ -71,13 +75,15 @@ class BouncingBallExample(nn.Module):
         return event_times
 
     def simulate(self, nbounces=1):
+        print("simlulate")
         event_times = self.get_collision_times(nbounces)
-
+        print("simlulate / got collisions")
         # get dense path
         t0, state = self.get_initial_state()
         trajectory = [state[0][None]]
         velocity = [state[1][None]]
         times = [t0.reshape(-1)]
+
         for event_t in event_times:
             tt = torch.linspace(
                 float(t0), float(event_t), int((float(event_t) - float(t0)) * 50)
@@ -158,7 +164,7 @@ if __name__ == "__main__":
     parser.add_argument("--adjoint", action="store_true")
     args = parser.parse_args()
 
-    gradcheck(args.nbounces)
+    # gradcheck(args.nbounces)
 
     system = BouncingBallExample()
     times, trajectory, velocity, event_times = system.simulate(nbounces=args.nbounces)

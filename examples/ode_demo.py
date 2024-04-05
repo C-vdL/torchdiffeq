@@ -14,9 +14,9 @@ parser.add_argument('--batch_time', type=int, default=10)
 parser.add_argument('--batch_size', type=int, default=20)
 parser.add_argument('--niters', type=int, default=2000)
 parser.add_argument('--test_freq', type=int, default=20)
-parser.add_argument('--viz', action='store_true')
+parser.add_argument('--viz', action='store_true', default=True)
 parser.add_argument('--gpu', type=int, default=0)
-parser.add_argument('--adjoint', action='store_true')
+parser.add_argument('--adjoint', action='store_true', default=True)
 args = parser.parse_args()
 
 if args.adjoint:

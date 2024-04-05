@@ -6,3 +6,11 @@
 .vscode
 build
 dist
+*.jpg
+/examples/.data
+*.png
+/.idea
+/examples/experiment1
+/examples/train_latent_ode
+*.gif
+*.pt
