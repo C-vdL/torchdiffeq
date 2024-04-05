@@ -3,6 +3,8 @@
 import argparse
 import os
 import math
+import glob
+from PIL import Image
 import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
@@ -257,7 +259,7 @@ if __name__ == "__main__":
         if itr % 10 == 0:
             print(itr, loss.item(), len(event_times))
 
-        if itr % 10 == 0:
+        if itr % 1 == 0:
             plt.figure()
             plt.plot(
                 obs_times.detach().cpu().numpy(),
@@ -271,7 +273,7 @@ if __name__ == "__main__":
             )
             plt.tight_layout()
             os.makedirs(args.save, exist_ok=True)
-            plt.savefig(f"{args.save}/{itr:05d}.png")
+            plt.savefig(f"{args.save}/bb_learned_{itr:05d}.png")
             plt.close()
 
         if (itr + 1) % 100 == 0:
@@ -283,3 +285,7 @@ if __name__ == "__main__":
             )
 
         del trajectory, loss
+
+    img, *imgs = [Image.open(f) for f in sorted(glob.glob(os.path.join(args.save, f"bb_learned_*.png")))]
+    img.save(fp=os.path.join(args.save, "bb_learned.gif"), format='GIF', append_images=imgs,
+             save_all=True, duration=10, loop=0)
