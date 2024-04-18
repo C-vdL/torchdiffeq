@@ -12,11 +12,11 @@ parser.add_argument('--method', type=str, choices=['dopri5', 'adams'], default='
 parser.add_argument('--data_size', type=int, default=1000)
 parser.add_argument('--batch_time', type=int, default=10)
 parser.add_argument('--batch_size', type=int, default=20)
-parser.add_argument('--niters', type=int, default=2000)
-parser.add_argument('--test_freq', type=int, default=20)
+parser.add_argument('--niters', type=int, default=100)
+parser.add_argument('--test_freq', type=int, default=1)
 parser.add_argument('--viz', action='store_true', default=True)
 parser.add_argument('--gpu', type=int, default=0)
-parser.add_argument('--adjoint', action='store_true', default=True)
+parser.add_argument('--adjoint', action='store_true', default=False)
 args = parser.parse_args()
 
 if args.adjoint:
@@ -55,7 +55,7 @@ def makedirs(dirname):
 
 
 if args.viz:
-    makedirs('png')
+    makedirs('png2')
     import matplotlib.pyplot as plt
     fig = plt.figure(figsize=(12, 4), facecolor='white')
     ax_traj = fig.add_subplot(131, frameon=False)
@@ -72,8 +72,11 @@ def visualize(true_y, pred_y, odefunc, itr):
         ax_traj.set_title('Trajectories')
         ax_traj.set_xlabel('t')
         ax_traj.set_ylabel('x,y')
-        ax_traj.plot(t.cpu().numpy(), true_y.cpu().numpy()[:, 0, 0], t.cpu().numpy(), true_y.cpu().numpy()[:, 0, 1], 'g-')
-        ax_traj.plot(t.cpu().numpy(), pred_y.cpu().numpy()[:, 0, 0], '--', t.cpu().numpy(), pred_y.cpu().numpy()[:, 0, 1], 'b--')
+        ax_traj.plot(t.cpu().numpy(), true_y.cpu().numpy()[:, 0, 0], label="true_0")
+        ax_traj.plot(t.cpu().numpy(), true_y.cpu().numpy()[:, 0, 1], 'g-', label="true_1")
+
+        ax_traj.plot(t.cpu().numpy(), pred_y.cpu().numpy()[:, 0, 0], '--', label="pred_0")
+        ax_traj.plot(t.cpu().numpy(), pred_y.cpu().numpy()[:, 0, 1], 'b--', label="pred_1")
         ax_traj.set_xlim(t.cpu().min(), t.cpu().max())
         ax_traj.set_ylim(-2, 2)
         ax_traj.legend()
