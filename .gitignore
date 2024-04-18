@@ -14,3 +14,4 @@ dist
 /examples/train_latent_ode
 *.gif
 *.pt
+*.pth

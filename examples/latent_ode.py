@@ -209,6 +209,7 @@ if __name__ == '__main__':
     nsample = 100
     device = torch.device('cuda:' + str(args.gpu)
                           if torch.cuda.is_available() else 'cpu')
+    device = "cpu"
 
     # generate toy spiral data
     orig_trajs, samp_trajs, orig_ts, samp_ts = generate_spiral2d(
@@ -291,7 +292,7 @@ if __name__ == '__main__':
                 'samp_ts': samp_ts,
             }, ckpt_path)
             print('Stored ckpt at {}'.format(ckpt_path))
-    print('Training complete after {} iters.'.format(itr))
+    print('Training completed after {} iters.'.format(itr))
 
     if args.visualize:
         with torch.no_grad():

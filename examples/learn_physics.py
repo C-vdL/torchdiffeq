@@ -6,6 +6,7 @@ import math
 import glob
 from PIL import Image
 import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 from torchdiffeq import odeint, odeint_event
@@ -20,6 +21,7 @@ class HamiltonianDynamics(nn.Module):
         self.scale = nn.Parameter(torch.tensor(10.0))
 
     def forward(self, t, state):
+        pos, vel, *rest = state
         pos, vel, *rest = state
         dpos = vel
         dvel = torch.tanh(self.dvel(torch.zeros_like(vel))) * self.scale
